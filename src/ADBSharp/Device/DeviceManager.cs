@@ -40,6 +40,8 @@ namespace ADBSharp.Device
                     string device_name = parts[0];
                     string device_status = parts[1];
 
+                    // TODO:fix remove disconnect device
+
                     var changedevice = Devices.Find(deviceC => deviceC.Name == device_name);
                     if (changedevice != null)
                     {

@@ -24,10 +24,12 @@ namespace ADBSharpDemo
                 Console.WriteLine("device " + (s as ADBDevice)!.Name + " new status:" + e);
             };
 
-            aDBClient.DeviceManager.ScanDevices();
-
-            Console.WriteLine("\ndevices:");
-            aDBClient.DeviceManager.Devices.ForEach(d => Console.WriteLine(d.Name + ':' + d.Status));
+            while (true)
+            {
+                aDBClient.DeviceManager.ScanDevices();
+                Thread.Sleep(1000);
+            }
+            
         }
     }
 }
