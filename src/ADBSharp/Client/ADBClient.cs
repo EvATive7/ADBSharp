@@ -1,49 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ADBSharp.Client
+namespace ADBSharp
 {
-    public class ADBClient
+    public partial class ADBClient
     {
         DirectoryNotFoundException directoryNotFoundException = new DirectoryNotFoundException("Work directory do not exists.");
         FileNotFoundException fileNotFoundException = new FileNotFoundException("Executable ADB file do not exists.");
 
-        private string _workdir;
-        public string WorkDir
-        {
-            get
-            {
-                return _workdir;
-            }
-            set
-            {
-                if (!Directory.Exists(value))
-                {
-                    throw directoryNotFoundException;
-                }
-                _workdir = value;
-            }
-        }
-        
-        private string _exefilepath;
-        public string Exefilepath
-        {
-            get
-            {
-                return _exefilepath;
-            }
-            set
-            {
-                if (!File.Exists(value))
-                {
-                    throw fileNotFoundException;
-                }
-                _exefilepath = value;
-            }
-        }
+        private string WorkDir;
+        private string ExeFilePath;
 
         public ADBClient(string workdir, string exefilepath)
         {
@@ -57,8 +28,16 @@ namespace ADBSharp.Client
                 throw fileNotFoundException;
             }
 
-            _workdir = workdir;
-            _exefilepath = exefilepath;
+            WorkDir = workdir;
+            ExeFilePath = exefilepath;
+
+            string oldValue = Environment.GetEnvironmentVariable("PATH");
+            Environment.SetEnvironmentVariable("PATH", oldValue + ";" + WorkDir);
+        }
+
+        ~ADBClient()
+        {
+
         }
     }
 }

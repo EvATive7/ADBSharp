@@ -1,5 +1,4 @@
 ﻿using ADBSharp;
-using ADBSharp.Client;
 
 namespace ADBSharpDemo
 {
@@ -8,6 +7,9 @@ namespace ADBSharpDemo
         static void Main(string[] args)
         {
             ADBClient aDBClient = new ADBClient(".\\platform-tools", ".\\platform-tools\\adb.exe");
+
+            var result = aDBClient.ExeCommand("devices");
+            Console.WriteLine(result.StdOut);
         }
     }
 }
