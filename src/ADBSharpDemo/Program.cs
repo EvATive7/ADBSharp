@@ -8,8 +8,15 @@ namespace ADBSharpDemo
         {
             ADBClient aDBClient = new ADBClient(".\\platform-tools", ".\\platform-tools\\adb.exe");
 
-            var result = aDBClient.ExeCommand("devices");
-            Console.WriteLine(result.StdOut);
+            aDBClient.ExeCommandViaCLI("kill-server");
+            aDBClient.ExeCommandViaCLI("start-server");
+
+            var resulta = aDBClient.ExeCommand("connect 127.0.0.1:7555");
+            Console.WriteLine(resulta.StdOut);
+
+            var resultb = aDBClient.ExeCommand("devices");
+            Console.WriteLine(resultb.StdOut);
+
         }
     }
 }

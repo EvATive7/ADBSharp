@@ -9,6 +9,8 @@ namespace ADBSharp
 {
     public partial class ADBClient
     {
+        private string _execPath => this.ExeFilePath + " ";
+
         /// <summary>
         /// Excute a command with blocking and output.
         /// </summary>
@@ -35,6 +37,8 @@ namespace ADBSharp
                 StartInfo = startInfo,
             };
 
+            Debug.WriteLine("ADB Executing:" + cmd);
+
             process.Start();
 
             if (maxWaitTime < 0)
@@ -53,5 +57,43 @@ namespace ADBSharp
                 return new CommandExcuteResult(new CommandExcuteTimeoutException());
             }
         }
+
+        /// <summary>
+        /// Excute a command via CLI with blocking and without output.
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
+        public CommandExcuteResult ExeCommandViaCLI(string cmd)
+        {
+            try
+            {
+                Util.WindowsCMD.ExecuteCommand(_execPath + cmd);
+            }
+            catch (Exception e)
+            {
+                return new CommandExcuteResult(e);
+            }
+            return new CommandExcuteResult("");
+        }
+
+        /// <summary>
+        /// Excute a command via CLI without blocking and output.
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
+        public CommandExcuteResult ExeCommandViaCLIAsync(string cmd)
+        {
+            try
+            {
+                Util.WindowsCMD.ExecuteCommandAsync(_execPath + cmd);
+            }
+            catch (Exception e)
+            {
+                return new CommandExcuteResult(e);
+            }
+            return new CommandExcuteResult("");
+        }
+    
+        
     }
 }

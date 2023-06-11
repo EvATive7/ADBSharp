@@ -31,7 +31,7 @@ namespace ADBSharp
             WorkDir = workdir;
             ExeFilePath = exefilepath;
 
-            string oldValue = Environment.GetEnvironmentVariable("PATH");
+            string oldValue = Environment.GetEnvironmentVariable("PATH")!;
             Environment.SetEnvironmentVariable("PATH", oldValue + ";" + WorkDir);
         }
 
