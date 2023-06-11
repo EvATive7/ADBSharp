@@ -33,6 +33,8 @@ namespace ADBSharp
 
             string oldValue = Environment.GetEnvironmentVariable("PATH")!;
             Environment.SetEnvironmentVariable("PATH", oldValue + ";" + WorkDir);
+
+            this.DeviceManager = new Device.DeviceManager(this);
         }
 
         ~ADBClient()

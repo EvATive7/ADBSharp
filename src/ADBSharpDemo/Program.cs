@@ -1,4 +1,5 @@
 ﻿using ADBSharp;
+using ADBSharp.Device;
 
 namespace ADBSharpDemo
 {
@@ -14,9 +15,19 @@ namespace ADBSharpDemo
             var resulta = aDBClient.ExeCommand("connect 127.0.0.1:7555");
             Console.WriteLine(resulta.StdOut);
 
-            var resultb = aDBClient.ExeCommand("devices");
-            Console.WriteLine(resultb.StdOut);
+            aDBClient.DeviceManager.NewDeviceAdded += (s, e) =>
+            {
+                Console.WriteLine("new device:" + e.Name);
+            };
+            aDBClient.DeviceManager.DeviceStatusChanged += (s, e) =>
+            {
+                Console.WriteLine("device " + (s as ADBDevice)!.Name + " new status:" + e);
+            };
 
+            aDBClient.DeviceManager.ScanDevices();
+
+            Console.WriteLine("\ndevices:");
+            aDBClient.DeviceManager.Devices.ForEach(d => Console.WriteLine(d.Name + ':' + d.Status));
         }
     }
 }
