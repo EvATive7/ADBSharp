@@ -11,6 +11,27 @@ namespace ADBSharp
     {
 #pragma warning disable IDE1006
         private string _execPath => this.ExeFilePath + " ";
+        private const int _forceGCTime = 10;
+        private int _execTimes_ = 0;
+        private int _execTimes
+        {
+            get
+            {
+                return _execTimes_;
+            }
+            set
+            {
+                if (value >= _forceGCTime)
+                {
+                    GC.Collect();
+                    _execTimes_ = 0;
+                }
+                else
+                {
+                    _execTimes_ = value;
+                }
+            }
+        }
 #pragma warning restore IDE1006
 
         /// <summary>
@@ -20,6 +41,8 @@ namespace ADBSharp
         /// <param name="maxWaitTime">unit: milliseconds</param>
         public CommandExcuteResult ExeCommand(string cmd, int maxWaitTime = -1)
         {
+            _execTimes++;
+
             ProcessStartInfo startInfo = new()
             {
                 FileName = _execPath,
@@ -51,13 +74,11 @@ namespace ADBSharp
             string output = process.StandardOutput.ReadToEnd();
             if (process.WaitForExit(maxWaitTime))
             {
-                GC.Collect();
                 return new CommandExcuteResult(output);
             }
             else
             {
                 process.Kill();
-                GC.Collect();
                 return new CommandExcuteResult(new CommandExcuteTimeoutException());
             }
         }
