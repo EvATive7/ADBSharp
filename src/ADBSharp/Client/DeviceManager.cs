@@ -13,8 +13,10 @@ namespace ADBSharp
         public DeviceManager(ADBClient client)
         {
             ADBClient = client;
+            AutoController = new DeviceManagerAutoController(this);
         }
 
+        public DeviceManagerAutoController AutoController;
         public List<ADBDevice> Devices = new();
 
         public event EventHandler<ADBDevice>? NewDeviceAdded;
@@ -89,7 +91,7 @@ namespace ADBSharp
                 _thread = new Thread(ThreadMethod);
             }
 
-            public void StartThread()
+            public void Start()
             {
                 _cancellationTokenSource = new CancellationTokenSource();
                 _thread = new Thread(ThreadMethod);
@@ -97,7 +99,7 @@ namespace ADBSharp
                 _thread.Start();
             }
 
-            public void StopThread()
+            public void Stop()
             {
                 _cancellationTokenSource.Cancel();
                 //_thread.Join();

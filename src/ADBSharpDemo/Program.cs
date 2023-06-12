@@ -27,8 +27,9 @@ namespace ADBSharpDemo
                 Console.WriteLine("device disconnected:" + e.Serial);
             };
 
-            myClient.DeviceManager.ScanDevices();
+            myClient.DeviceManager.AutoController.Start();
 
+            Thread.Sleep(5000);
             myClient.DeviceManager.Devices.ForEach(d =>
             {
                 var _ = d.ExeCommand("shell pm list users");
