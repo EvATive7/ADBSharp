@@ -16,7 +16,7 @@ namespace ADBSharp.Util
         /// <param name="cmd"></param>
         public static void ExecuteCommand(string cmd)
         {
-            ProcessStartInfo startInfo = new ProcessStartInfo()
+            ProcessStartInfo startInfo = new()
             {
                 FileName = "cmd.exe",
                 Arguments = 
@@ -32,7 +32,7 @@ namespace ADBSharp.Util
                 StandardErrorEncoding = Encoding.UTF8
             };
 
-            Process prss = new Process()
+            using Process prss = new()
             {
                 EnableRaisingEvents = true,
                 StartInfo = startInfo
@@ -50,7 +50,7 @@ namespace ADBSharp.Util
             if (CMD == null)
             {
                 CMD = new Process();
-                ProcessStartInfo startInfo = new ProcessStartInfo()
+                ProcessStartInfo startInfo = new()
                 {
                     FileName = "cmd",
                     Arguments = "/K prompt $g ",

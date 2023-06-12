@@ -8,8 +8,8 @@ namespace ADBSharp.Device
 {
     public class DeviceStatusNotSupportOperationException : Exception
     {
-        private string _need;
-        private string _now;
+        private readonly string _need;
+        private readonly string _now;
         public DeviceStatusNotSupportOperationException(string need, string now)
         {
             _need = need;

@@ -6,14 +6,15 @@ namespace ADBSharpDemo
     {
         static void Main(string[] args)
         {
-            ADBClient myClient = new(".\\platform-tools", ".\\platform-tools\\adb.exe");
+            ADBClient myClient = new(".\\platform-tools", ".\\platform-tools\\adb.exe");//declare an adb client
 
-            myClient.ExeCommandViaCLI("kill-server");
-            myClient.ExeCommandViaCLI("start-server");
+            myClient.ExeCommandViaCLI("kill-server");//kill server (adb cmd)
+            myClient.ExeCommandViaCLI("start-server");//start server (adb cmd)
 
             myClient.ExeCommand("connect 127.0.0.1:7555");
             myClient.ExeCommand("connect 127.0.0.1:5555");
 
+            //resiger event handler
             myClient.DeviceManager.NewDeviceAdded += (s, e) =>
             {
                 Console.WriteLine("new device:" + e.Serial + ",status:" + e.Status);
@@ -27,8 +28,10 @@ namespace ADBSharpDemo
                 Console.WriteLine("device disconnected:" + e.Serial);
             };
 
+            //start devices auto scanner
             myClient.DeviceManager.AutoController.Start();
 
+            //test
             Thread.Sleep(5000);
             myClient.DeviceManager.Devices.ForEach(d =>
             {
