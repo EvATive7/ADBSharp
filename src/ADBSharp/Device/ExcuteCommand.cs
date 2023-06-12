@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ADBSharp.Device;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,7 +10,23 @@ namespace ADBSharp
 {
     public partial class ADBDevice
     {
-        private string _s_id => "-s " + Name + " ";
+        private string GetADBCMDWithSerial()
+        {
+            return "-s " + Serial + " ";
+        }
+
+        private CommandExcuteResult PreCheck()
+        {
+            if (disposed)
+            {
+                return new CommandExcuteResult(new DeviceUnavailableException(new DeviceDisposedException()));
+            }
+            if (this.Status != "device")
+            {
+                return new CommandExcuteResult(new DeviceUnavailableException(new DeviceStatusNotSupportOperationException("device", Status)));
+            }
+            return new CommandExcuteResult("precheck passed.");
+        }
 
         /// <summary>
         /// Excute a command with blocking and output.
@@ -18,7 +35,8 @@ namespace ADBSharp
         /// <param name="maxWaitTime">unit: milliseconds</param>
         public CommandExcuteResult ExeCommand(string cmd, int maxWaitTime = -1)
         {
-            return this.ADBClient.ExeCommand(_s_id + cmd, maxWaitTime);
+            var rt = PreCheck();
+            return rt.Success ? this.ADBClient.ExeCommand(GetADBCMDWithSerial() + cmd, maxWaitTime) : rt;
         }
 
         /// <summary>
@@ -28,7 +46,8 @@ namespace ADBSharp
         /// <returns></returns>
         public CommandExcuteResult ExeCommandViaCLI(string cmd)
         {
-            return this.ADBClient.ExeCommandViaCLI(_s_id + cmd);
+            var rt = PreCheck();
+            return rt.Success ? this.ADBClient.ExeCommandViaCLI(GetADBCMDWithSerial() + cmd) : rt;
         }
 
         /// <summary>
@@ -38,7 +57,8 @@ namespace ADBSharp
         /// <returns></returns>
         public CommandExcuteResult ExeCommandViaCLIAsync(string cmd)
         {
-            return ADBClient.ExeCommandViaCLIAsync(_s_id + cmd);
+            var rt = PreCheck();
+            return rt.Success ? ADBClient.ExeCommandViaCLIAsync(GetADBCMDWithSerial() + cmd) : rt;
         }
     }
 }
