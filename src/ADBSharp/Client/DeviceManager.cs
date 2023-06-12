@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ADBSharp.Device
+namespace ADBSharp
 {
     public class DeviceManager
     {
@@ -56,7 +56,7 @@ namespace ADBSharp.Device
                     else
                     {
                         // add a new device
-                        var device = new ADBDevice(device_name) { Status = device_status };
+                        var device = new ADBDevice(device_name,this.ADBClient) { Status = device_status };
                         Devices.Add(device);
                         NewDeviceAdded?.Invoke(device, device);
                     }

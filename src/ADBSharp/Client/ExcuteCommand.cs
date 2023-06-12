@@ -9,7 +9,9 @@ namespace ADBSharp
 {
     public partial class ADBClient
     {
+#pragma warning disable IDE1006
         private string _execPath => this.ExeFilePath + " ";
+#pragma warning restore IDE1006
 
         /// <summary>
         /// Excute a command with blocking and output.
@@ -18,20 +20,20 @@ namespace ADBSharp
         /// <param name="maxWaitTime">unit: milliseconds</param>
         public CommandExcuteResult ExeCommand(string cmd, int maxWaitTime = -1)
         {
-            ProcessStartInfo startInfo = new ProcessStartInfo()
+            ProcessStartInfo startInfo = new()
             {
-                FileName = "adb.exe",
+                FileName = _execPath,
                 Arguments = cmd,
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 RedirectStandardInput = true,
-                StandardOutputEncoding = Encoding.GetEncoding(Util.Vars.defaultCodePage),
-                StandardErrorEncoding = Encoding.GetEncoding(Util.Vars.defaultCodePage)
+                StandardOutputEncoding = Encoding.UTF8,
+                StandardErrorEncoding = Encoding.UTF8
             };
 
-            using Process process = new Process()
+            using Process process = new()
             {
                 EnableRaisingEvents = true,
                 StartInfo = startInfo,

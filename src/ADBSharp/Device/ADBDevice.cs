@@ -4,18 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ADBSharp.Device
+namespace ADBSharp
 {
-    public class ADBDevice:IDisposable
+    public partial class ADBDevice:IDisposable
     {
         private bool disposedValue;
+
+        private readonly ADBClient ADBClient;
 
         public string Name { get; set; }
         public string Status { get; set; } = "";
 
-        public ADBDevice(string name)
+        public ADBDevice(string name,ADBClient client)
         {
             Name = name;
+            ADBClient = client;
         }
 
         protected virtual void Dispose(bool disposing)

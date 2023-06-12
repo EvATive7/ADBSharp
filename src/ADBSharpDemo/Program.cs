@@ -1,5 +1,4 @@
 ﻿using ADBSharp;
-using ADBSharp.Device;
 
 namespace ADBSharpDemo
 {
@@ -7,33 +6,34 @@ namespace ADBSharpDemo
     {
         static void Main(string[] args)
         {
-            ADBClient aDBClient = new(".\\platform-tools", ".\\platform-tools\\adb.exe");
+            ADBClient myClient = new(".\\platform-tools", ".\\platform-tools\\adb.exe");
 
-            aDBClient.ExeCommandViaCLI("kill-server");
-            aDBClient.ExeCommandViaCLI("start-server");
+            myClient.ExeCommandViaCLI("kill-server");
+            myClient.ExeCommandViaCLI("start-server");
 
-            var resulta = aDBClient.ExeCommand("connect 127.0.0.1:7555");
-            Console.WriteLine(resulta.StdOut);
+            myClient.ExeCommand("connect 127.0.0.1:7555");
+            myClient.ExeCommand("connect 127.0.0.1:5555");
 
-            aDBClient.DeviceManager.NewDeviceAdded += (s, e) =>
+            myClient.DeviceManager.NewDeviceAdded += (s, e) =>
             {
                 Console.WriteLine("new device:" + e.Name + ",status:" + e.Status);
             };
-            aDBClient.DeviceManager.DeviceStatusChanged += (s, e) =>
+            myClient.DeviceManager.DeviceStatusChanged += (s, e) =>
             {
                 Console.WriteLine("device " + (s as ADBDevice)!.Name + " new status:" + e);
             };
-            aDBClient.DeviceManager.DeviceDisconnected += (s, e) =>
+            myClient.DeviceManager.DeviceDisconnected += (s, e) =>
             {
                 Console.WriteLine("device disconnected:" + e.Name);
             };
 
-            while (true)
+            myClient.DeviceManager.ScanDevices();
+
+            myClient.DeviceManager.Devices.ForEach(d =>
             {
-                aDBClient.DeviceManager.ScanDevices();
-                Thread.Sleep(1000);
-            }
-            
+                var _ = d.ExeCommand("shell pm list users");
+                Console.WriteLine(_.StdOut);
+            });
         }
     }
 }

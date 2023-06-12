@@ -10,11 +10,11 @@ namespace ADBSharp
 {
     public partial class ADBClient
     {
-        DirectoryNotFoundException directoryNotFoundException = new DirectoryNotFoundException("Work directory do not exists.");
-        FileNotFoundException fileNotFoundException = new FileNotFoundException("Executable ADB file do not exists.");
+        readonly DirectoryNotFoundException directoryNotFoundException = new("Work directory do not exists.");
+        readonly FileNotFoundException fileNotFoundException = new("Executable ADB file do not exists.");
 
-        private string WorkDir;
-        private string ExeFilePath;
+        private readonly string WorkDir;
+        private readonly string ExeFilePath;
 
         public ADBClient(string workdir, string exefilepath)
         {
@@ -34,12 +34,7 @@ namespace ADBSharp
             string oldValue = Environment.GetEnvironmentVariable("PATH")!;
             Environment.SetEnvironmentVariable("PATH", oldValue + ";" + WorkDir);
 
-            this.DeviceManager = new Device.DeviceManager(this);
-        }
-
-        ~ADBClient()
-        {
-
+            this.DeviceManager = new DeviceManager(this);
         }
     }
 }
