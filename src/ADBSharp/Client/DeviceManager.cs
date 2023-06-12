@@ -82,6 +82,7 @@ namespace ADBSharp
         public class DeviceManagerAutoController
         {
             private readonly DeviceManager ParentManager;
+            public int FreshInterval = 1000;
 
             private CancellationTokenSource _cancellationTokenSource;
             private Thread _thread;
@@ -119,7 +120,7 @@ namespace ADBSharp
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     ParentManager.ScanDevices();
-                    Thread.Sleep(1000);
+                    Thread.Sleep(FreshInterval);
                 }
 
                 ParentManager.NewDeviceAdded -= OnParentManagerNewDeviceAdded;
