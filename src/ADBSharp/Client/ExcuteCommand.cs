@@ -48,14 +48,16 @@ namespace ADBSharp
                 maxWaitTime = int.MaxValue;
             }
 
+            string output = process.StandardOutput.ReadToEnd();
             if (process.WaitForExit(maxWaitTime))
             {
-                string output = process.StandardOutput.ReadToEnd();
+                GC.Collect();
                 return new CommandExcuteResult(output);
             }
             else
             {
                 process.Kill();
+                GC.Collect();
                 return new CommandExcuteResult(new CommandExcuteTimeoutException());
             }
         }
