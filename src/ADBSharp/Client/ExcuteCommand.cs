@@ -39,7 +39,7 @@ namespace ADBSharp
                 StartInfo = startInfo,
             };
 
-            Debug.WriteLine("ADB Executing:" + cmd);
+            Logger.Debug("ADB Executing:" + cmd);
 
             process.Start();
 

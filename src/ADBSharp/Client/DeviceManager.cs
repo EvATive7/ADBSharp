@@ -51,6 +51,7 @@ namespace ADBSharp
                         if (changedevice.Status != device_status)
                         {
                             // change device status
+                            Logger.Info($"{device_name}:{changedevice.Status}->{device_status}");
                             changedevice.Status = device_status;
                             DeviceStatusChanged?.Invoke(changedevice, changedevice.Status);
                         }
@@ -58,6 +59,7 @@ namespace ADBSharp
                     else
                     {
                         // add a new device
+                        Logger.Info($"+:{device_name}");
                         var device = new ADBDevice(device_name, this.ADBClient) { Status = device_status };
                         Devices.Add(device);
                         NewDeviceAdded?.Invoke(device, device);
@@ -69,6 +71,7 @@ namespace ADBSharp
                 var dcdev = Devices.FindAll(d => !_tempdevicels.Exists(td => td.Item1 == d.Serial));
                 dcdev.ForEach(d =>
                 {
+                    Logger.Info($"-:{d.Serial}");
                     d.Dispose();
                     Devices.Remove(d);
                     this.DeviceDisconnected?.Invoke(d, d);

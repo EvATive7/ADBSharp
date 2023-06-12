@@ -1,9 +1,14 @@
 ﻿using ADBSharp;
+using System.Diagnostics;
 
 namespace ADBSharpDemo
 {
     internal class Program
     {
+        static void log(string msg, string level)
+        {
+            Debug.WriteLine(DateTime.Now.ToString("s") + $" [{level}] " + msg);
+        }
         static void Main(string[] args)
         {
             ADBClient myClient = new(".\\platform-tools", ".\\platform-tools\\adb.exe");//declare an adb client
@@ -13,6 +18,24 @@ namespace ADBSharpDemo
 
             myClient.ExeCommand("connect 127.0.0.1:7555");
             myClient.ExeCommand("connect 127.0.0.1:5555");
+
+            //resiger log event
+            Logger.DEBUG += (msg) =>
+            {
+                log(msg, "DEBU");
+            };
+            Logger.INFO += (msg) =>
+            {
+                log(msg, "INFO");
+            };
+            Logger.WARN += (msg) =>
+            {
+                log(msg, "WARN");
+            };
+            Logger.ERROR += (msg) =>
+            {
+                log(msg, "ERRO");
+            };
 
             //resiger event handler
             myClient.DeviceManager.NewDeviceAdded += (s, e) =>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using static ADBSharp.Logger;
 
 namespace ADBSharp.Util
 {
@@ -38,7 +39,7 @@ namespace ADBSharp.Util
                 StartInfo = startInfo
             };
 
-            Debug.WriteLine("WindowsCMD Executing:" + cmd);
+            Debug("WindowsCMD Executing:" + cmd);
 
             prss.Start();
             prss.WaitForExit();
@@ -67,7 +68,7 @@ namespace ADBSharp.Util
                 CMD.Start();
             }
 
-            Debug.WriteLine("WindowsCMD Async Executing:" + cmd);
+            Debug("WindowsCMD Async Executing:" + cmd);
             CMD.StandardInput.WriteLine(cmd);
         }
     }
