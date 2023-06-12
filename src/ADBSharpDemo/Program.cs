@@ -7,7 +7,7 @@ namespace ADBSharpDemo
     {
         static void Main(string[] args)
         {
-            ADBClient aDBClient = new ADBClient(".\\platform-tools", ".\\platform-tools\\adb.exe");
+            ADBClient aDBClient = new(".\\platform-tools", ".\\platform-tools\\adb.exe");
 
             aDBClient.ExeCommandViaCLI("kill-server");
             aDBClient.ExeCommandViaCLI("start-server");

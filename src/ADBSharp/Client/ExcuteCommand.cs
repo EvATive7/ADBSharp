@@ -27,8 +27,8 @@ namespace ADBSharp
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 RedirectStandardInput = true,
-                StandardOutputEncoding = Encoding.GetEncoding(Util.vars.defaultCodePage),
-                StandardErrorEncoding = Encoding.GetEncoding(Util.vars.defaultCodePage)
+                StandardOutputEncoding = Encoding.GetEncoding(Util.Vars.defaultCodePage),
+                StandardErrorEncoding = Encoding.GetEncoding(Util.Vars.defaultCodePage)
             };
 
             Process process = new Process()

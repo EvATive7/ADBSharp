@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace ADBSharp.Util
 {
-    internal static class vars
+    internal static class Vars
     {
-        static vars()
+        static Vars()
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }

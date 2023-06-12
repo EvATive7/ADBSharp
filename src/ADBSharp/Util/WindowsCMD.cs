@@ -28,8 +28,8 @@ namespace ADBSharp.Util
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 RedirectStandardInput = true,
-                StandardOutputEncoding = Encoding.GetEncoding(vars.defaultCodePage),
-                StandardErrorEncoding = Encoding.GetEncoding(vars.defaultCodePage)
+                StandardOutputEncoding = Encoding.GetEncoding(Vars.defaultCodePage),
+                StandardErrorEncoding = Encoding.GetEncoding(Vars.defaultCodePage)
             };
 
             Process prss = new Process()
@@ -59,8 +59,8 @@ namespace ADBSharp.Util
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     RedirectStandardInput = true,
-                    StandardOutputEncoding = Encoding.GetEncoding(vars.defaultCodePage),
-                    StandardErrorEncoding = Encoding.GetEncoding(vars.defaultCodePage)
+                    StandardOutputEncoding = Encoding.GetEncoding(Vars.defaultCodePage),
+                    StandardErrorEncoding = Encoding.GetEncoding(Vars.defaultCodePage)
                 };
                 CMD.EnableRaisingEvents = true;
                 CMD.StartInfo = startInfo;

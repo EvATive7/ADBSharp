@@ -9,13 +9,13 @@ namespace ADBSharp.Device
 {
     public class DeviceManager
     {
-        private ADBClient ADBClient;
+        private readonly ADBClient ADBClient;
         public DeviceManager(ADBClient client)
         {
             ADBClient = client;
         }
 
-        public List<ADBDevice> Devices = new List<ADBDevice>();
+        public List<ADBDevice> Devices = new();
 
         public event EventHandler<ADBDevice>? NewDeviceAdded;
         public event EventHandler<ADBDevice>? DeviceDisconnected;
