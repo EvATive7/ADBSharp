@@ -31,7 +31,7 @@ namespace ADBSharp
                 StandardErrorEncoding = Encoding.GetEncoding(Util.Vars.defaultCodePage)
             };
 
-            Process process = new Process()
+            using Process process = new Process()
             {
                 EnableRaisingEvents = true,
                 StartInfo = startInfo,
