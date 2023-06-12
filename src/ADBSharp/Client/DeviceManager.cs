@@ -73,5 +73,69 @@ namespace ADBSharp
                 });
             }
         }
+
+        public class DeviceManagerAutoController
+        {
+            private readonly DeviceManager ParentManager;
+
+            private CancellationTokenSource _cancellationTokenSource;
+            private Thread _thread;
+
+            public DeviceManagerAutoController(DeviceManager manager)
+            {
+                ParentManager = manager;
+
+                _cancellationTokenSource = new CancellationTokenSource();
+                _thread = new Thread(ThreadMethod);
+            }
+
+            public void StartThread()
+            {
+                _cancellationTokenSource = new CancellationTokenSource();
+                _thread = new Thread(ThreadMethod);
+
+                _thread.Start();
+            }
+
+            public void StopThread()
+            {
+                _cancellationTokenSource.Cancel();
+                //_thread.Join();
+            }
+
+            private void ThreadMethod()
+            {
+                CancellationToken cancellationToken = _cancellationTokenSource.Token;
+
+                ParentManager.NewDeviceAdded += OnParentManagerNewDeviceAdded;
+                ParentManager.DeviceDisconnected += OnParentManagerDeviceDisconnected;
+                ParentManager.DeviceStatusChanged += OnParentManagerDeviceStatusChanged;
+
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    ParentManager.ScanDevices();
+                    Thread.Sleep(1000);
+                }
+
+                ParentManager.NewDeviceAdded -= OnParentManagerNewDeviceAdded;
+                ParentManager.DeviceDisconnected -= OnParentManagerDeviceDisconnected;
+                ParentManager.DeviceStatusChanged -= OnParentManagerDeviceStatusChanged;
+            }
+
+            private void OnParentManagerDeviceStatusChanged(object? sender, string e)
+            {
+                
+            }
+
+            private void OnParentManagerDeviceDisconnected(object? sender, ADBDevice e)
+            {
+                
+            }
+
+            private void OnParentManagerNewDeviceAdded(object? sender, ADBDevice e)
+            {
+                
+            }
+        }
     }
 }
