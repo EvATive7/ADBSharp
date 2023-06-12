@@ -15,6 +15,7 @@ namespace ADBSharp
 
         private readonly string WorkDir;
         private readonly string ExeFilePath;
+        public DeviceManager DeviceManager;
 
         public ADBClient(string workdir, string exefilepath)
         {

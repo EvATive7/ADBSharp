@@ -8,28 +8,28 @@ namespace ADBSharp
 {
     public partial class ADBDevice:IDisposable
     {
-        private bool disposedValue;
+        private bool disposed;
 
         private readonly ADBClient ADBClient;
 
-        public string Name { get; set; }
+        public string Serial { get; set; }
         public string Status { get; set; } = "";
 
         public ADBDevice(string name,ADBClient client)
         {
-            Name = name;
+            Serial = name;
             ADBClient = client;
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!disposed)
             {
                 if (disposing)
                 {
                     Status = "disconnected";
                 }
-                disposedValue = true;
+                disposed = true;
             }
         }
         public void Dispose()

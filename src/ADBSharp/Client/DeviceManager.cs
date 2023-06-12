@@ -43,7 +43,7 @@ namespace ADBSharp
                     string device_name = parts[0];
                     string device_status = parts[1];
 
-                    var changedevice = Devices.Find(deviceC => deviceC.Name == device_name);
+                    var changedevice = Devices.Find(deviceC => deviceC.Serial == device_name);
                     if (changedevice != null)
                     {
                         if (changedevice.Status != device_status)
@@ -56,7 +56,7 @@ namespace ADBSharp
                     else
                     {
                         // add a new device
-                        var device = new ADBDevice(device_name,this.ADBClient) { Status = device_status };
+                        var device = new ADBDevice(device_name, this.ADBClient) { Status = device_status };
                         Devices.Add(device);
                         NewDeviceAdded?.Invoke(device, device);
                     }
@@ -64,9 +64,10 @@ namespace ADBSharp
                 }
 
                 // remove disconnect device
-                var dcdev = Devices.FindAll(d => !_tempdevicels.Exists(td => td.Item1 == d.Name));
+                var dcdev = Devices.FindAll(d => !_tempdevicels.Exists(td => td.Item1 == d.Serial));
                 dcdev.ForEach(d =>
                 {
+                    d.Dispose();
                     Devices.Remove(d);
                     this.DeviceDisconnected?.Invoke(d, d);
                 });

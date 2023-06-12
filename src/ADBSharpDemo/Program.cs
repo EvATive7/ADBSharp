@@ -16,15 +16,15 @@ namespace ADBSharpDemo
 
             myClient.DeviceManager.NewDeviceAdded += (s, e) =>
             {
-                Console.WriteLine("new device:" + e.Name + ",status:" + e.Status);
+                Console.WriteLine("new device:" + e.Serial + ",status:" + e.Status);
             };
             myClient.DeviceManager.DeviceStatusChanged += (s, e) =>
             {
-                Console.WriteLine("device " + (s as ADBDevice)!.Name + " new status:" + e);
+                Console.WriteLine("device " + (s as ADBDevice)!.Serial + " new status:" + e);
             };
             myClient.DeviceManager.DeviceDisconnected += (s, e) =>
             {
-                Console.WriteLine("device disconnected:" + e.Name);
+                Console.WriteLine("device disconnected:" + e.Serial);
             };
 
             myClient.DeviceManager.ScanDevices();
