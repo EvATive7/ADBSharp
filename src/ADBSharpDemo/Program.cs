@@ -5,6 +5,7 @@ namespace ADBSharpDemo
 {
     internal class Program
     {
+        static int loglevel = 0;
         static void log(string msg, string level)
         {
             Debug.WriteLine(DateTime.Now.ToString("s") + $" [{level}] " + msg);
@@ -20,22 +21,27 @@ namespace ADBSharpDemo
             myClient.ExeCommand("connect 127.0.0.1:5555");
 
             //resiger log event
-            Logger.DEBUG += (msg) =>
-            {
-                log(msg, "DEBU");
-            };
-            Logger.INFO += (msg) =>
-            {
-                log(msg, "INFO");
-            };
-            Logger.WARN += (msg) =>
-            {
-                log(msg, "WARN");
-            };
-            Logger.ERROR += (msg) =>
-            {
-                log(msg, "ERRO");
-            };
+
+            if (loglevel <= 0)
+                Logger.DEBUG += (msg) =>
+                {
+                    log(msg, "DEBU");
+                };
+            if (loglevel <= 1)
+                Logger.INFO += (msg) =>
+                {
+                    log(msg, "INFO");
+                };
+            if (loglevel <= 2)
+                Logger.WARN += (msg) =>
+                {
+                    log(msg, "WARN");
+                };
+            if (loglevel <= 3)
+                Logger.ERROR += (msg) =>
+                {
+                    log(msg, "ERRO");
+                };
 
             //resiger event handler
             myClient.DeviceManager.NewDeviceAdded += (s, e) =>
