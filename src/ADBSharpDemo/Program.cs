@@ -17,11 +17,15 @@ namespace ADBSharpDemo
 
             aDBClient.DeviceManager.NewDeviceAdded += (s, e) =>
             {
-                Console.WriteLine("new device:" + e.Name);
+                Console.WriteLine("new device:" + e.Name + ",status:" + e.Status);
             };
             aDBClient.DeviceManager.DeviceStatusChanged += (s, e) =>
             {
                 Console.WriteLine("device " + (s as ADBDevice)!.Name + " new status:" + e);
+            };
+            aDBClient.DeviceManager.DeviceDisconnected += (s, e) =>
+            {
+                Console.WriteLine("device disconnected:" + e.Name);
             };
 
             while (true)

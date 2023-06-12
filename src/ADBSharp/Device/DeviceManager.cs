@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,16 +18,18 @@ namespace ADBSharp.Device
         public List<ADBDevice> Devices = new List<ADBDevice>();
 
         public event EventHandler<ADBDevice>? NewDeviceAdded;
+        public event EventHandler<ADBDevice>? DeviceDisconnected;
         public event EventHandler<string>? DeviceStatusChanged;
 
-        private static string oldScanOutput = "";
+        private static string _oldScanOutput = "";
         public void ScanDevices()
         {
             string output = ADBClient.ExeCommand("devices").StdOut!;
 
-            if (output != oldScanOutput)
+            if (output != _oldScanOutput)
             {
-                oldScanOutput = output;
+                _oldScanOutput = output;
+                List<Tuple<string, string>> _tempdevicels = new();
 
                 foreach (string str in output.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
@@ -40,24 +43,33 @@ namespace ADBSharp.Device
                     string device_name = parts[0];
                     string device_status = parts[1];
 
-                    // TODO:fix remove disconnect device
-
                     var changedevice = Devices.Find(deviceC => deviceC.Name == device_name);
                     if (changedevice != null)
                     {
                         if (changedevice.Status != device_status)
                         {
+                            // change device status
                             changedevice.Status = device_status;
-                            DeviceStatusChanged?.Invoke(changedevice,changedevice.Status);
+                            DeviceStatusChanged?.Invoke(changedevice, changedevice.Status);
                         }
                     }
                     else
                     {
+                        // add a new device
                         var device = new ADBDevice(device_name) { Status = device_status };
                         Devices.Add(device);
                         NewDeviceAdded?.Invoke(device, device);
                     }
+                    _tempdevicels.Add(new Tuple<string, string>(device_name, device_status));
                 }
+
+                // remove disconnect device
+                var dcdev = Devices.FindAll(d => !_tempdevicels.Exists(td => td.Item1 == d.Name));
+                dcdev.ForEach(d =>
+                {
+                    Devices.Remove(d);
+                    this.DeviceDisconnected?.Invoke(d, d);
+                });
             }
         }
     }
