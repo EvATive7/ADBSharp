@@ -74,6 +74,7 @@ namespace ADBSharp
             string output = process.StandardOutput.ReadToEnd();
             if (process.WaitForExit(maxWaitTime))
             {
+                Logger.Debug("ADB Executing result:\n" +  output);
                 return new CommandExcuteResult(output);
             }
             else
@@ -90,6 +91,8 @@ namespace ADBSharp
         /// <returns></returns>
         public CommandExcuteResult ExeCommandViaCLI(string cmd)
         {
+            _execTimes++;
+
             try
             {
                 Util.WindowsCMD.ExecuteCommand(_execPath + cmd);
@@ -108,6 +111,8 @@ namespace ADBSharp
         /// <returns></returns>
         public CommandExcuteResult ExeCommandViaCLIAsync(string cmd)
         {
+            _execTimes++;
+
             try
             {
                 Util.WindowsCMD.ExecuteCommandAsync(_execPath + cmd);
