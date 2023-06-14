@@ -1,5 +1,6 @@
 ﻿using ADBSharp;
 using System.Diagnostics;
+using System.Reflection.Metadata.Ecma335;
 
 namespace ADBSharpDemo
 {
@@ -21,7 +22,6 @@ namespace ADBSharpDemo
             myClient.ExeCommand("connect 127.0.0.1:5555");
 
             //resiger log event
-
             if (loglevel <= 0)
                 Logger.DEBUG += (msg) =>
                 {
@@ -67,6 +67,19 @@ namespace ADBSharpDemo
                 var _ = d.ExeCommand("shell pm list users");
                 Console.WriteLine(_.StdOut);
             });
+
+            while(true)
+            {
+                Console.Write(" > ");
+                var cmd = Console.ReadLine()!;
+                if (cmd.Replace(" ","") == string.Empty)
+                {
+                    Console.WriteLine("space command disabled.\n");
+                    continue;
+                }
+                var exerst = myClient.ExeCommand(cmd);
+                Console.WriteLine(exerst.StdOut);
+            }
         }
     }
 }
