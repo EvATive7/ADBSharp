@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,50 +16,39 @@ namespace ADBSharp
             return "-s " + Serial + " ";
         }
 
-        private CommandExcuteResult PreCheck()
+        private void PreCheck()
         {
             if (disposed)
             {
-                return new CommandExcuteResult(new DeviceUnavailableException(new DeviceDisposedException()));
+                throw new DeviceUnavailableException(new DeviceDisposedException());
             }
             if (this.Status != "device")
             {
-                return new CommandExcuteResult(new DeviceUnavailableException(new DeviceStatusNotSupportOperationException("device", Status)));
+                throw new DeviceUnavailableException(new DeviceStatusNotSupportOperationException("device", Status));
             }
-            return new CommandExcuteResult("precheck passed.");
         }
 
         /// <summary>
-        /// Excute a command with blocking and output.
+        /// Excute a command with output.
         /// </summary>
         /// <param name="cmd"></param>
-        /// <param name="maxWaitTime">unit: milliseconds</param>
-        public CommandExcuteResult ExeCommand(string cmd, int maxWaitTime = -1)
+        public async Task<string> ExeCommand(string cmd)
         {
-            var rt = PreCheck();
-            return rt.Success ? this.ADBClient.ExeCommand(GetADBCMDWithSerial() + cmd, maxWaitTime) : rt;
+            PreCheck();
+
+            return await this.ADBClient.ExeCommand(GetADBCMDWithSerial() + cmd);
         }
 
         /// <summary>
-        /// Excute a command via CLI with blocking and without output.
-        /// </summary>
-        /// <param name="cmd"></param>
-        /// <returns></returns>
-        public CommandExcuteResult ExeCommandViaCLI(string cmd)
-        {
-            var rt = PreCheck();
-            return rt.Success ? this.ADBClient.ExeCommandViaCLI(GetADBCMDWithSerial() + cmd) : rt;
-        }
-
-        /// <summary>
-        /// Excute a command via CLI without blocking and output.
+        /// Excute a command via CLI without output.
         /// </summary>
         /// <param name="cmd"></param>
         /// <returns></returns>
-        public CommandExcuteResult ExeCommandViaCLIAsync(string cmd)
+        public async Task<string> ExeCommandViaCLI(string cmd)
         {
-            var rt = PreCheck();
-            return rt.Success ? ADBClient.ExeCommandViaCLIAsync(GetADBCMDWithSerial() + cmd) : rt;
+            PreCheck();
+
+            return await this.ADBClient.ExeCommandViaCLI(GetADBCMDWithSerial() + cmd);
         }
     }
 }

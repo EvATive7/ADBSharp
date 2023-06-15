@@ -35,11 +35,10 @@ namespace ADBSharp
 #pragma warning restore IDE1006
 
         /// <summary>
-        /// Excute a command with blocking and output.
+        /// Excute a command with output.
         /// </summary>
         /// <param name="cmd"></param>
-        /// <param name="maxWaitTime">unit: milliseconds</param>
-        public CommandExcuteResult ExeCommand(string cmd, int maxWaitTime = -1)
+        public async Task<string> ExeCommand(string cmd)
         {
             _execTimes++;
 
@@ -53,7 +52,7 @@ namespace ADBSharp
                 RedirectStandardError = true,
                 RedirectStandardInput = true,
                 StandardOutputEncoding = Encoding.UTF8,
-                StandardErrorEncoding = Encoding.UTF8
+                StandardErrorEncoding = Encoding.UTF8 // TODO:
             };
 
             using Process process = new()
@@ -66,64 +65,24 @@ namespace ADBSharp
 
             process.Start();
 
-            if (maxWaitTime < 0)
-            {
-                maxWaitTime = int.MaxValue;
-            }
-
             string output = process.StandardOutput.ReadToEnd();
-            if (process.WaitForExit(maxWaitTime))
-            {
-                Logger.Debug("ADB Executing result:\n" +  output);
-                return new CommandExcuteResult(output);
-            }
-            else
-            {
-                process.Kill();
-                return new CommandExcuteResult(new CommandExcuteTimeoutException());
-            }
+            Logger.Debug($"ADB Execute result:\n{output}");
+
+            await process.WaitForExitAsync();
+            return output;
         }
 
         /// <summary>
-        /// Excute a command via CLI with blocking and without output.
+        /// Excute a command via CLI without output.
         /// </summary>
         /// <param name="cmd"></param>
         /// <returns></returns>
-        public CommandExcuteResult ExeCommandViaCLI(string cmd)
+        public async Task<string> ExeCommandViaCLI(string cmd)
         {
             _execTimes++;
-
-            try
-            {
-                Util.WindowsCMD.ExecuteCommand(_execPath + cmd);
-            }
-            catch (Exception e)
-            {
-                return new CommandExcuteResult(e);
-            }
-            return new CommandExcuteResult("");
+            
+            return await Util.WindowsCMD.ExecuteCommand(_execPath + cmd);
+            
         }
-
-        /// <summary>
-        /// Excute a command via CLI without blocking and output.
-        /// </summary>
-        /// <param name="cmd"></param>
-        /// <returns></returns>
-        public CommandExcuteResult ExeCommandViaCLIAsync(string cmd)
-        {
-            _execTimes++;
-
-            try
-            {
-                Util.WindowsCMD.ExecuteCommandAsync(_execPath + cmd);
-            }
-            catch (Exception e)
-            {
-                return new CommandExcuteResult(e);
-            }
-            return new CommandExcuteResult("");
-        }
-    
-        
     }
 }

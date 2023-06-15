@@ -9,13 +9,13 @@ using static ADBSharp.Logger;
 
 namespace ADBSharp.Util
 {
-    internal class WindowsCMD
+    public class WindowsCMD // TODO:
     {
         /// <summary>
         /// Excute a command via CLI with blocking.
         /// </summary>
         /// <param name="cmd"></param>
-        public static void ExecuteCommand(string cmd)
+        public static async Task<string> ExecuteCommand(string cmd)
         {
             ProcessStartInfo startInfo = new()
             {
@@ -42,34 +42,13 @@ namespace ADBSharp.Util
             Debug("WindowsCMD Executing:" + cmd);
 
             prss.Start();
-            prss.WaitForExit();
-        }
+            await prss.WaitForExitAsync();
+            string output = prss.StandardOutput.ReadToEnd();
+            prss.Kill();
 
-        private static Process? CMD;
-        public static void ExecuteCommandAsync(string cmd)
-        {
-            if (CMD == null)
-            {
-                CMD = new Process();
-                ProcessStartInfo startInfo = new()
-                {
-                    FileName = "cmd",
-                    Arguments = "/K prompt $g ",
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    RedirectStandardInput = true,
-                    StandardOutputEncoding = Encoding.UTF8,
-                    StandardErrorEncoding = Encoding.UTF8
-                };
-                CMD.EnableRaisingEvents = true;
-                CMD.StartInfo = startInfo;
-                CMD.Start();
-            }
+            Debug("WindowsCMD Execute result:\n" + output);
 
-            Debug("WindowsCMD Async Executing:" + cmd);
-            CMD.StandardInput.WriteLine(cmd);
+            return output;
         }
     }
 }

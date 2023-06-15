@@ -24,9 +24,9 @@ namespace ADBSharp
         public event EventHandler<string>? DeviceStatusChanged;
 
         private static string _oldScanOutput = "";
-        public void ScanDevices()
+        public async void ScanDevices()
         {
-            string output = ADBClient.ExeCommand("devices").StdOut!;
+            string output = await ADBClient.ExeCommand("devices");
 
             if (output != _oldScanOutput)
             {
