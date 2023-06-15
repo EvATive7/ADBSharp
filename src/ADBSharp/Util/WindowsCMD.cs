@@ -9,7 +9,7 @@ using static ADBSharp.Logger;
 
 namespace ADBSharp.Util
 {
-    public class WindowsCMD // TODO:
+    public class WindowsCMD
     {
         /// <summary>
         /// Excute a command via CLI with blocking.
