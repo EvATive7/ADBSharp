@@ -11,7 +11,7 @@ namespace ADBSharpDemo
         static int loglevel = 0;
         static void log(string msg, string level)
         {
-            Debug.WriteLine(DateTime.Now.ToString("s") + $" [{level}] " + msg);
+            Debug.WriteLine($"{DateTime.Now:s} [{level}] {msg}");
         }
         #endregion
 
@@ -90,7 +90,7 @@ namespace ADBSharpDemo
                     Console.WriteLine("space command disabled.\n");
                     continue;
                 }
-                var exerst = myClient.ExeCommand(cmd);
+                var exerst = await myClient.ExeCommand(cmd);
                 Console.WriteLine(exerst);
             }
             #endregion
